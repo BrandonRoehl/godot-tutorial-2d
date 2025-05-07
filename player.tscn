@@ -41,7 +41,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="Player"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(1, -8)
@@ -52,4 +52,4 @@ position = Vector2(1, -12)
 sprite_frames = SubResource("SpriteFrames_1jxqw")
 animation = &"idle"
 autoplay = "idle"
-frame_progress = 0.212548
+frame_progress = 0.0765231
