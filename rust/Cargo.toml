@@ -8,6 +8,9 @@ crate-type = ["cdylib"]
 
 [dependencies]
 # godot = "0.2.4"
-godot = { git = "https://github.com/godot-rust/gdext.git" }
+# godot = { git = "https://github.com/godot-rust/gdext.git" }
 
+[dependencies.godot]
+git = "https://github.com/godot-rust/gdext.git"
+features = ["register-docs"] # Registers RustDoc comments, so they appear in editor docs.
 
