@@ -17,8 +17,6 @@ const JUMP_VELOCITY: f32 = -400.0;
 #[godot_api]
 impl ICharacterBody2D for Player {
     fn init(base: Base<CharacterBody2D>) -> Self {
-        godot_print!("Hello, world!"); // Prints to the Godot console
-
         Self {
             speed: 400.0,
             angular_speed: std::f64::consts::PI,
@@ -28,6 +26,8 @@ impl ICharacterBody2D for Player {
 
     // `delta` can be f32 or f64; #[godot_api] macro converts transparently.
     fn physics_process(&mut self, delta: f32) {
+        // godot_print!("proccessing {delta}"); // Prints to the Godot console
+
         // This is the mut base we are going to borrow mutate and release
         // get the speed and the input
         let mut base = self.base_mut();
@@ -35,7 +35,7 @@ impl ICharacterBody2D for Player {
         let input = Input::singleton();
 
         // Vertical movement
-        if base.is_on_floor() {
+        if !base.is_on_floor() {
             // Gravity
             velocity += base.get_gravity() * delta;
         } else if input.is_action_just_pressed("ui_accept") {
