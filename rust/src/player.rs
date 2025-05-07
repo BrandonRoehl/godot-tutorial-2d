@@ -5,9 +5,6 @@ use godot::prelude::*;
 #[derive(GodotClass)]
 #[class(base=CharacterBody2D)]
 struct Player {
-    speed: f64,
-    angular_speed: f64,
-
     base: Base<CharacterBody2D>,
 }
 
@@ -17,16 +14,12 @@ const JUMP_VELOCITY: f32 = -400.0;
 #[godot_api]
 impl ICharacterBody2D for Player {
     fn init(base: Base<CharacterBody2D>) -> Self {
-        Self {
-            speed: 400.0,
-            angular_speed: std::f64::consts::PI,
-            base,
-        }
+        Self { base }
     }
 
     // `delta` can be f32 or f64; #[godot_api] macro converts transparently.
     fn physics_process(&mut self, delta: f32) {
-        // godot_print!("proccessing {delta}"); // Prints to the Godot console
+        // godot_print!("processing {delta}"); // Prints to the Godot console
 
         // This is the mut base we are going to borrow mutate and release
         // get the speed and the input
