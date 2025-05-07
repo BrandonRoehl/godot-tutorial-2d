@@ -1,5 +1,5 @@
-use godot::classes::CharacterBody2D;
-use godot::classes::ICharacterBody2D;
+use godot::classes::{CharacterBody2D, ICharacterBody2D, Input};
+use godot::global::*;
 use godot::prelude::*;
 
 #[derive(GodotClass)]
@@ -11,6 +11,9 @@ struct Player {
     base: Base<CharacterBody2D>,
 }
 
+const SPEED: f32 = 300.0;
+const JUMP_VELOCITY: f32 = -400.0;
+
 #[godot_api]
 impl ICharacterBody2D for Player {
     fn init(base: Base<CharacterBody2D>) -> Self {
@@ -21,5 +24,37 @@ impl ICharacterBody2D for Player {
             angular_speed: std::f64::consts::PI,
             base,
         }
+    }
+
+    // `delta` can be f32 or f64; #[godot_api] macro converts transparently.
+    fn physics_process(&mut self, delta: f32) {
+        // This is the mut base we are going to borrow mutate and release
+        // get the speed and the input
+        let mut base = self.base_mut();
+        let mut velocity = base.get_velocity();
+        let input = Input::singleton();
+
+        // Vertical movement
+        if base.is_on_floor() {
+            // Gravity
+            velocity += base.get_gravity() * delta;
+        } else if input.is_action_just_pressed("ui_accept") {
+            // Jump
+            velocity.y = JUMP_VELOCITY;
+        }
+
+        // Horizontal movement
+        // Get the input direction and handle the movement/deceleration.
+        // As good practice, you should replace UI actions with custom gameplay actions.
+        let direction = input.get_axis("ui_left", "ui_right");
+        if direction != 0.0 {
+            velocity.x = direction * SPEED;
+        } else {
+            // Deceleration
+            velocity.x = move_toward(velocity.x as f64, 0.0, SPEED as f64) as f32;
+        }
+
+        base.set_velocity(velocity);
+        base.move_and_slide();
     }
 }
