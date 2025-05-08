@@ -4,12 +4,12 @@ compatibility_minimum = 4.1
 reloadable = true
 
 [libraries]
-linux.debug.x86_64 =     "res://rust/target/debug/libtutorial.so"
-linux.release.x86_64 =   "res://rust/target/release/libtutorial.so"
-windows.debug.x86_64 =   "res://rust/target/debug/tutorial.dll"
-windows.release.x86_64 = "res://rust/target/release/tutorial.dll"
-macos.debug =            "res://rust/target/debug/libtutorial.dylib"
-macos.release =          "res://rust/target/release/libtutorial.dylib"
-macos.debug.arm64 =      "res://rust/target/debug/libtutorial.dylib"
-macos.release.arm64 =    "res://rust/target/release/libtutorial.dylib"
+linux.debug.x86_64 =     "res://target/debug/libtutorial.so"
+linux.release.x86_64 =   "res://target/release/libtutorial.so"
+windows.debug.x86_64 =   "res://target/debug/tutorial.dll"
+windows.release.x86_64 = "res://target/release/tutorial.dll"
+macos.debug =            "res://target/debug/libtutorial.dylib"
+macos.release =          "res://target/release/libtutorial.dylib"
+macos.debug.arm64 =      "res://target/debug/libtutorial.dylib"
+macos.release.arm64 =    "res://target/release/libtutorial.dylib"
 

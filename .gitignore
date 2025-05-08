@@ -2,3 +2,8 @@
 .godot/
 /android/
 rust/target/
+
+
+# Added by cargo
+
+/target
