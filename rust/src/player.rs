@@ -5,16 +5,23 @@ use godot::prelude::*;
 #[derive(GodotClass)]
 #[class(base=CharacterBody2D)]
 struct Player {
+    #[export]
+    speed: f32,
+
+    #[export]
+    jump_velocity: f32,
+
     base: Base<CharacterBody2D>,
 }
-
-const SPEED: f32 = 130.0;
-const JUMP_VELOCITY: f32 = -300.0;
 
 #[godot_api]
 impl ICharacterBody2D for Player {
     fn init(base: Base<CharacterBody2D>) -> Self {
-        Self { base }
+        Self {
+            base,
+            speed: 130.0,
+            jump_velocity: -300.0,
+        }
     }
 
     // On frame rates higher than 60 FPS, this function is not called enough so
@@ -29,6 +36,8 @@ impl ICharacterBody2D for Player {
 
         // This is the mut base we are going to borrow mutate and release
         // get the speed and the input
+        let jump_velocity = self.jump_velocity;
+        let speed = self.speed;
         let mut base = self.base_mut();
         let mut velocity = base.get_velocity();
         let input = Input::singleton();
@@ -39,7 +48,7 @@ impl ICharacterBody2D for Player {
             velocity += base.get_gravity() * delta;
         } else if input.is_action_just_pressed("ui_accept") {
             // Jump
-            velocity.y = JUMP_VELOCITY;
+            velocity.y = jump_velocity;
         }
 
         // Horizontal movement
@@ -47,10 +56,10 @@ impl ICharacterBody2D for Player {
         // As good practice, you should replace UI actions with custom gameplay actions.
         let direction = input.get_axis("ui_left", "ui_right");
         if direction != 0.0 {
-            velocity.x = direction * SPEED;
+            velocity.x = direction * speed;
         } else {
             // Deceleration
-            velocity.x = move_toward(velocity.x as f64, 0.0, SPEED as f64) as f32;
+            velocity.x = move_toward(velocity.x as f64, 0.0, speed as f64) as f32;
         }
 
         base.set_velocity(velocity);
