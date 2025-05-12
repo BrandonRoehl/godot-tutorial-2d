@@ -1,5 +1,6 @@
 use godot::prelude::*;
 mod coin;
+mod killzone;
 mod player;
 
 struct TutorialBase;

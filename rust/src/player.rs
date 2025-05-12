@@ -6,10 +6,10 @@ use godot::prelude::*;
 #[class(base=CharacterBody2D)]
 struct Player {
     #[export]
-    speed: f32,
+    speed: real,
 
     #[export]
-    jump_velocity: f32,
+    jump_velocity: real,
 
     base: Base<CharacterBody2D>,
 }

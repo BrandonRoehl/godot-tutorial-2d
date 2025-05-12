@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cua82ndyxaymw"]
+
+[node name="Killzone" type="Killzone"]
+collision_mask = 2
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
