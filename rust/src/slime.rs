@@ -25,6 +25,7 @@ struct Slime {
     base: Base<Node2D>,
 }
 
+#[godot_api]
 impl Slime {
     /// Raycast and invert direction if necessary
     fn raycast(&mut self) {
