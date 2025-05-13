@@ -1,4 +1,4 @@
-use godot::classes::{Area2D, IArea2D, Timer};
+use godot::classes::{Area2D, Engine, IArea2D, Timer};
 use godot::global::*;
 use godot::prelude::*;
 
@@ -12,14 +12,28 @@ struct Killzone {
 #[godot_api]
 impl Killzone {
     fn on_timer_timeout(&mut self) {
-        self.base().get_tree().unwrap().reload_current_scene();
-        // .create_timer(2.0).unwrap();
-        // get_tree().unwrap().reload_current_scene().expect("Failed to reload scene");
+        Engine::singleton().set_time_scale(1.0);
+
+        self.base()
+            .get_tree()
+            .expect("Node must exist in a scene")
+            .reload_current_scene();
     }
 
-    fn on_body_entered(&mut self, _body: Gd<Node2D>) {
+    fn on_body_entered(&mut self, body: Gd<Node2D>) {
         godot_print!("You have died");
 
+        if !body.is_class("Player") {
+            // Soft error here
+            godot_error!("Body is not a player");
+            return;
+        }
+
+        body.get_node_or_null("CollisionShape2D")
+            .expect("Player should have a node")
+            .queue_free();
+
+        Engine::singleton().set_time_scale(0.5);
         self.timer.start();
     }
 }

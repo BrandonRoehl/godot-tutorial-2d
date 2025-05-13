@@ -8,7 +8,7 @@ struct Slime {
     #[export(range = (0.0, 100.0, or_greater))]
     speed: real,
 
-    // these can take values enums and more
+    // These can take values enums and more
     // #[init(val = Direction::Right)]
     #[export(enum = (Left, Right))]
     direction: Direction,
@@ -86,12 +86,13 @@ impl Direction {
         }
     }
 
-    // fn invert(&mut self) {
-    //     *self = match self {
-    //         Direction::Right => Direction::Left,
-    //         Direction::Left => Direction::Right,
-    //     }
-    // }
+    /// Invert the direction in place
+    fn _invert(&mut self) {
+        *self = match self {
+            Direction::Right => Direction::Left,
+            Direction::Left => Direction::Right,
+        }
+    }
 }
 
 impl std::fmt::Display for Direction {

@@ -20,17 +20,8 @@ impl Coin {
 #[godot_api]
 impl IArea2D for Coin {
     fn ready(&mut self) {
-        godot_print!("Coin is ready");
-
         self.signals()
             .body_entered()
             .connect_self(Self::on_body_entered);
-
-        // .connect_self()
-        // .connect(
-        //     self.base(),
-        //     "on_body_entered",
-        //     GodotObject::null(),
-        // )
     }
 }

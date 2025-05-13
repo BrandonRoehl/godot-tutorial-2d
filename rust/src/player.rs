@@ -19,13 +19,13 @@ struct Player {
 
 #[godot_api]
 impl ICharacterBody2D for Player {
-    // On frame rates higher than 60 FPS, this function is not called enough so
-    // we see jitters appear in gameplay. This should be converted to have player
-    // movement happen in `process` instead of `physics_process`.
-    // This should still be called for collision detection but the horizontal
-    // movement should be removed from this function call.
-    //
-    // `delta` can be f32 or f64; #[godot_api] macro converts transparently.
+    /// On frame rates higher than 60 FPS, this function is not called enough so
+    /// we see jitters appear in gameplay. This should be converted to have player
+    /// movement happen in `process` instead of `physics_process`.
+    /// This should still be called for collision detection but the horizontal
+    /// movement should be removed from this function call.
+    ///
+    /// `delta` can be f32 or f64; #[godot_api] macro converts transparently.
     fn physics_process(&mut self, delta: f32) {
         // godot_print!("processing {delta}"); // Prints to the Godot console
 
