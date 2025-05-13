@@ -16,7 +16,8 @@ struct Slime {
     base: Base<Node2D>,
 
     // MARK: - links
-    rays: (OnReady<Gd<RayCast2D>>, OnReady<Gd<RayCast2D>>),
+    ray_right: OnReady<Gd<RayCast2D>>,
+    ray_left: OnReady<Gd<RayCast2D>>,
     animated_sprite: OnReady<Gd<AnimatedSprite2D>>,
 }
 
@@ -24,12 +25,13 @@ impl Slime {
     /// Raycast and invert direction if necessary
     fn raycast(&mut self) {
         let (ray, result) = match self.direction {
-            Direction::Right => (&self.rays.1, Direction::Left),
-            Direction::Left => (&self.rays.0, Direction::Right),
+            Direction::Right => (&self.ray_right, Direction::Left),
+            Direction::Left => (&self.ray_left, Direction::Right),
         };
         if ray.is_colliding() {
             self.direction = result;
             result.set_flip_h(&mut self.animated_sprite);
+            godot_print!("New direction {result}");
         }
     }
 }
@@ -40,10 +42,8 @@ impl INode2D for Slime {
         Self {
             speed: 60.0,
             direction: Direction::Right,
-            rays: (
-                OnReady::from_node("RayCastLeft"),
-                OnReady::from_node("RayCastRight"),
-            ),
+            ray_left: OnReady::from_node("RayCastLeft"),
+            ray_right: OnReady::from_node("RayCastRight"),
             animated_sprite: OnReady::from_node("AnimatedSprite2D"),
             base,
         }
@@ -79,7 +79,7 @@ impl Direction {
         }
     }
 
-    fn set_flip_h(&self, sprite: &mut OnReady<Gd<AnimatedSprite2D>>) {
+    fn set_flip_h(&self, sprite: &mut Gd<AnimatedSprite2D>) {
         match self {
             Direction::Right => sprite.set_flip_h(false),
             Direction::Left => sprite.set_flip_h(true),
@@ -92,4 +92,13 @@ impl Direction {
     //         Direction::Left => Direction::Right,
     //     }
     // }
+}
+
+impl std::fmt::Display for Direction {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Direction::Right => write!(f, "Right"),
+            Direction::Left => write!(f, "Left"),
+        }
+    }
 }
