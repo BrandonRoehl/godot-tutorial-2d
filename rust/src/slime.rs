@@ -2,23 +2,27 @@ use godot::classes::{AnimatedSprite2D, INode2D, Node2D, RayCast2D};
 use godot::prelude::*;
 
 #[derive(GodotClass)]
-#[class(base=Node2D)]
+#[class(init, base=Node2D)]
 struct Slime {
-    // #[init(val = 60.0)]
     #[export(range = (0.0, 100.0, or_greater))]
+    #[init(val = 60.0)]
     speed: real,
 
     // These can take values enums and more
-    // #[init(val = Direction::Right)]
     #[export(enum = (Left, Right))]
+    #[init(val = Direction::Right)]
     direction: Direction,
 
-    base: Base<Node2D>,
-
-    // MARK: - links
+    #[init(val = OnReady::from_node("RayCastRight"))]
     ray_right: OnReady<Gd<RayCast2D>>,
+
+    #[init(val = OnReady::from_node("RayCastLeft"))]
     ray_left: OnReady<Gd<RayCast2D>>,
+
+    #[init(val = OnReady::from_node("AnimatedSprite2D"))]
     animated_sprite: OnReady<Gd<AnimatedSprite2D>>,
+
+    base: Base<Node2D>,
 }
 
 impl Slime {
@@ -38,17 +42,6 @@ impl Slime {
 
 #[godot_api]
 impl INode2D for Slime {
-    fn init(base: Base<Node2D>) -> Self {
-        Self {
-            speed: 60.0,
-            direction: Direction::Right,
-            ray_left: OnReady::from_node("RayCastLeft"),
-            ray_right: OnReady::from_node("RayCastRight"),
-            animated_sprite: OnReady::from_node("AnimatedSprite2D"),
-            base,
-        }
-    }
-
     fn process(&mut self, delta: f32) {
         self.raycast();
 

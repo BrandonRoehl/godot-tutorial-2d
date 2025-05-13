@@ -1,10 +1,12 @@
-use godot::classes::{CharacterBody2D, ICharacterBody2D, Input};
+use godot::classes::{AnimatedSprite2D, CharacterBody2D, ICharacterBody2D, Input};
 use godot::global::*;
 use godot::prelude::*;
 
 #[derive(GodotClass)]
 #[class(init, base=CharacterBody2D)]
 struct Player {
+    // @Export is the Godot equivalent of #[export] this is what makes it
+    // available in the editor.
     #[export(range = (0.0, 100.0, or_greater))]
     #[init(val = 130.0)]
     speed: real,
@@ -13,6 +15,9 @@ struct Player {
     #[export(range = (-100.0, 0.0, or_less))]
     #[init(val = -300.0)]
     jump_velocity: real,
+
+    #[init(val = OnReady::from_node("AnimatedSprite2D"))]
+    animated_sprite: OnReady<Gd<AnimatedSprite2D>>,
 
     base: Base<CharacterBody2D>,
 }
@@ -29,34 +34,35 @@ impl ICharacterBody2D for Player {
     fn physics_process(&mut self, delta: f32) {
         // godot_print!("processing {delta}"); // Prints to the Godot console
 
-        // This is the mut base we are going to borrow mutate and release
-        // get the speed and the input
-        let jump_velocity = self.jump_velocity;
-        let speed = self.speed;
-        let mut base = self.base_mut();
+        // Mutate the base node
+        let base = self.base();
         let mut velocity = base.get_velocity();
-        let input = Input::singleton();
 
+        let input = Input::singleton();
         // Vertical movement
         if !base.is_on_floor() {
             // Gravity
             velocity += base.get_gravity() * delta;
-        } else if input.is_action_just_pressed("ui_accept") {
+        } else if input.is_action_just_pressed("jump") {
             // Jump
-            velocity.y = jump_velocity;
+            velocity.y = self.jump_velocity;
         }
 
         // Horizontal movement
         // Get the input direction and handle the movement/deceleration.
         // As good practice, you should replace UI actions with custom gameplay actions.
-        let direction = input.get_axis("ui_left", "ui_right");
+        // Float range between -1.0 and 1.0
+        let direction = input.get_axis("move_left", "move_right");
         if direction != 0.0 {
-            velocity.x = direction * speed;
+            velocity.x = direction * self.speed;
+            self.animated_sprite.set_flip_h(direction < 0.0);
         } else {
-            // Deceleration
-            velocity.x = move_toward(velocity.x as f64, 0.0, speed as f64) as f32;
+            // Deceleration instead of snapping to 0
+            velocity.x = move_toward(velocity.x as f64, 0.0, self.speed as f64) as f32;
         }
 
+        // At the end mutably borrow the base to set what we need
+        let mut base = self.base_mut();
         base.set_velocity(velocity);
         base.move_and_slide();
     }

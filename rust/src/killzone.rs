@@ -1,4 +1,4 @@
-use godot::classes::{Area2D, Engine, IArea2D, Timer};
+use godot::classes::{Area2D, CollisionShape2D, Engine, IArea2D, Timer};
 use godot::global::*;
 use godot::prelude::*;
 
@@ -29,9 +29,13 @@ impl Killzone {
             return;
         }
 
-        body.get_node_or_null("CollisionShape2D")
-            .expect("Player should have a node")
-            .queue_free();
+        let mut collision_shape = body
+            .try_get_node_as::<CollisionShape2D>("CollisionShape2D")
+            .expect("Player should have a node");
+
+        // Following is the one from the tutorial but I prefer this approach
+        collision_shape.set_deferred("disabled", &true.to_variant());
+        // collision_shape.queue_free();
 
         Engine::singleton().set_time_scale(0.5);
         self.timer.start();
@@ -40,6 +44,8 @@ impl Killzone {
 
 #[godot_api]
 impl IArea2D for Killzone {
+    /// Leaving this init to showcase an alternative way to initialize if you
+    /// need to do something more than just a standard value assignment.
     fn init(base: Base<Area2D>) -> Self {
         Self {
             timer: OnReady::from_node("Timer"),
