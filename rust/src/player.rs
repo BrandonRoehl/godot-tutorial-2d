@@ -35,14 +35,13 @@ impl ICharacterBody2D for Player {
         // godot_print!("processing {delta}"); // Prints to the Godot console
 
         // Mutate the base node
-        let base = self.base();
-        let mut velocity = base.get_velocity();
-
+        let mut velocity: Vector2 = self.base().get_velocity();
         let input = Input::singleton();
+
         // Vertical movement
-        if !base.is_on_floor() {
+        if !self.base().is_on_floor() {
             // Gravity
-            velocity += base.get_gravity() * delta;
+            velocity += self.base().get_gravity() * delta;
         } else if input.is_action_just_pressed("jump") {
             // Jump
             velocity.y = self.jump_velocity;
@@ -51,15 +50,23 @@ impl ICharacterBody2D for Player {
         // Horizontal movement
         // Get the input direction and handle the movement/deceleration.
         // As good practice, you should replace UI actions with custom gameplay actions.
-        // Float range between -1.0 and 1.0
+        // Float range (-1.0..=1.0)
         let direction = input.get_axis("move_left", "move_right");
-        if direction != 0.0 {
-            velocity.x = direction * self.speed;
-            self.animated_sprite.set_flip_h(direction < 0.0);
-        } else {
+        if direction == 0.0 {
             // Deceleration instead of snapping to 0
             velocity.x = move_toward(velocity.x as f64, 0.0, self.speed as f64) as f32;
+        } else {
+            velocity.x = direction * self.speed;
+            self.animated_sprite.set_flip_h(direction < 0.0);
         }
+
+        // Set the animation based on the state of the player
+        let animation = match (direction, self.base().is_on_floor()) {
+            (_, false) => "jump",
+            (0.0, true) => "idle",
+            (_, true) => "run",
+        };
+        self.animated_sprite.play_ex().name(animation).done();
 
         // At the end mutably borrow the base to set what we need
         let mut base = self.base_mut();
