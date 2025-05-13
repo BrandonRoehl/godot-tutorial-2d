@@ -5,11 +5,12 @@ use godot::prelude::*;
 #[derive(GodotClass)]
 #[class(init, base=CharacterBody2D)]
 struct Player {
-    #[export]
+    #[export(range = (0.0, 100.0, or_greater))]
     #[init(val = 130.0)]
     speed: real,
 
-    #[export]
+    // #[export] // these can have validations on them
+    #[export(range = (-100.0, 0.0, or_less))]
     #[init(val = -300.0)]
     jump_velocity: real,
 
