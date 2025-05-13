@@ -3,12 +3,14 @@ use godot::global::*;
 use godot::prelude::*;
 
 #[derive(GodotClass)]
-#[class(base=CharacterBody2D)]
+#[class(init, base=CharacterBody2D)]
 struct Player {
     #[export]
+    #[init(val = 130.0)]
     speed: real,
 
     #[export]
+    #[init(val = -300.0)]
     jump_velocity: real,
 
     base: Base<CharacterBody2D>,
@@ -16,14 +18,6 @@ struct Player {
 
 #[godot_api]
 impl ICharacterBody2D for Player {
-    fn init(base: Base<CharacterBody2D>) -> Self {
-        Self {
-            base,
-            speed: 130.0,
-            jump_velocity: -300.0,
-        }
-    }
-
     // On frame rates higher than 60 FPS, this function is not called enough so
     // we see jitters appear in gameplay. This should be converted to have player
     // movement happen in `process` instead of `physics_process`.

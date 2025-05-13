@@ -3,7 +3,7 @@ use godot::global::*;
 use godot::prelude::*;
 
 #[derive(GodotClass)]
-#[class(base=Area2D)]
+#[class(init, base=Area2D)]
 struct Coin {
     base: Base<Area2D>,
 }
@@ -19,10 +19,6 @@ impl Coin {
 
 #[godot_api]
 impl IArea2D for Coin {
-    fn init(base: Base<Area2D>) -> Self {
-        Self { base }
-    }
-
     fn ready(&mut self) {
         godot_print!("Coin is ready");
 
