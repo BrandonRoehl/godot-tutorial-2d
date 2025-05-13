@@ -3,6 +3,7 @@ mod coin;
 mod killzone;
 mod player;
 mod slime;
+mod state;
 
 struct TutorialBase;
 
