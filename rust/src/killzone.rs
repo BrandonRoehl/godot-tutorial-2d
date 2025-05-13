@@ -54,14 +54,13 @@ impl IArea2D for Killzone {
     }
 
     fn ready(&mut self) {
-        let zone = self.to_gd();
-
         godot_print!("Zone ready");
 
         self.signals()
             .body_entered()
-            .connect_obj(&zone, Self::on_body_entered);
+            .connect_self(Self::on_body_entered);
 
+        let zone = self.to_gd();
         self.timer
             .signals()
             .timeout()
