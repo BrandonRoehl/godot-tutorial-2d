@@ -22,6 +22,20 @@ impl Coin {
         // signals together is good practice as it allows a base state to
         // observe more where these are just hooked up on creation
         self.signals().collected().emit(1);
+        // To call it directly reference the `bind_mut` either on a `OnReady`
+        // such as
+        // ```rust
+        // self.state.bind_mut().add_score(1);
+        // ```
+        // or via
+        // ```rust
+        // let state = self
+        //     .base()
+        //     .try_get_node_as::<State>("%State")
+        //     .expect("State node must exist")
+        //     .bind_mut()
+        //     .add_score(1);
+        // ```
         self.base_mut().queue_free();
     }
 }
