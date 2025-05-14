@@ -1,11 +1,11 @@
 [gd_scene load_steps=13 format=4 uid="uid://c2f75gdrmxtvy"]
 
 [ext_resource type="TileSet" uid="uid://w3nl28y4qdc1" path="res://assets/game.tres" id="1_7jktm"]
-[ext_resource type="PackedScene" uid="uid://das3jihsbv6ii" path="res://player.tscn" id="1_80nbo"]
-[ext_resource type="PackedScene" uid="uid://dhm08fb24nlgs" path="res://platform.tscn" id="3_feb5d"]
-[ext_resource type="PackedScene" uid="uid://cua82ndyxaymw" path="res://killzone.tscn" id="4_7jktm"]
-[ext_resource type="PackedScene" uid="uid://fjko55g22slx" path="res://coin.tscn" id="4_fc0e3"]
-[ext_resource type="PackedScene" uid="uid://dvkbg2vsou0rw" path="res://slime.tscn" id="5_ryrav"]
+[ext_resource type="PackedScene" uid="uid://das3jihsbv6ii" path="res://scenes/player.tscn" id="1_80nbo"]
+[ext_resource type="PackedScene" uid="uid://dhm08fb24nlgs" path="res://scenes/platform.tscn" id="3_feb5d"]
+[ext_resource type="PackedScene" uid="uid://cua82ndyxaymw" path="res://scenes/killzone.tscn" id="4_7jktm"]
+[ext_resource type="PackedScene" uid="uid://fjko55g22slx" path="res://scenes/coin.tscn" id="4_fc0e3"]
+[ext_resource type="PackedScene" uid="uid://dvkbg2vsou0rw" path="res://scenes/slime.tscn" id="5_ryrav"]
 [ext_resource type="FontFile" uid="uid://brm5eat40csbk" path="res://assets/fonts/PixelOperator8.ttf" id="7_eow3j"]
 [ext_resource type="FontFile" uid="uid://cy7tli2ucbe8x" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="7_j5wjh"]
 
@@ -112,6 +112,9 @@ position = Vector2(32, -86)
 [node name="Slime" parent="." instance=ExtResource("5_ryrav")]
 position = Vector2(-8, -64)
 
+[node name="Slime2" parent="." instance=ExtResource("5_ryrav")]
+position = Vector2(-8, 64)
+
 [node name="Player" parent="." instance=ExtResource("1_80nbo")]
 position = Vector2(0, -5)
 
@@ -132,8 +135,6 @@ theme_override_font_sizes/font_size = 8
 text = "[Space] to Jump"
 horizontal_alignment = 1
 
-[node name="Music" type="AudioStreamPlayer2D" parent="."]
-
 [node name="Hud" type="CanvasLayer" parent="."]
 layer = 2
 
@@ -147,6 +148,3 @@ theme_override_fonts/font = ExtResource("7_j5wjh")
 theme_override_font_sizes/font_size = 40
 text = "Score: 0"
 horizontal_alignment = 2
-
-[node name="Slime" parent="Hud" instance=ExtResource("5_ryrav")]
-position = Vector2(-8, 64)

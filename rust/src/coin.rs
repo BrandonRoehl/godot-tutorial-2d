@@ -1,4 +1,4 @@
-use godot::classes::{Area2D, IArea2D};
+use godot::classes::{AnimationPlayer, Area2D, IArea2D};
 use godot::global::*;
 use godot::prelude::*;
 
@@ -8,6 +8,9 @@ use crate::state::State;
 #[class(init, base=Area2D)]
 struct Coin {
     base: Base<Area2D>,
+
+    #[init(val = OnReady::from_node("AnimationPlayer"))]
+    animation_player: OnReady<Gd<AnimationPlayer>>,
 }
 
 #[godot_api]
@@ -36,7 +39,9 @@ impl Coin {
         //     .bind_mut()
         //     .add_score(1);
         // ```
-        self.base_mut().queue_free();
+
+        // self.base_mut().queue_free();
+        self.animation_player.play_ex().name("pickup").done();
     }
 }
 

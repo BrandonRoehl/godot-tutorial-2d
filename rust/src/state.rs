@@ -13,7 +13,6 @@ pub struct State {
     label: OnReady<Gd<Label>>,
 }
 
-#[godot_api]
 impl State {
     pub fn add_score(&mut self, score: i64) {
         self.score += score;
