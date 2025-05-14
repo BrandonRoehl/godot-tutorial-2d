@@ -1,3 +1,4 @@
+# Godot Rust Tutorial
 
 This is me playing around and learning Godot.
 
@@ -13,4 +14,10 @@ come back to.
 License for my code is MIT. For the assets they can be downloaded
 [here](https://brackeysgames.itch.io/brackeys-platformer-bundle) and are under
 CC0. Markdown for both are included in this repository.
+
+# Building
+
+```shell
+cargo build
+```
 
